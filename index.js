@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-
+require('dotenv').config();
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
@@ -10,7 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 
-const uri = "mongodb+srv://mollika:aEDmf8qW1iFrwnNG@cluster0.hl2eknl.mongodb.net/?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.hl2eknl.mongodb.net/?retryWrites=true&w=majority`;
+// const uri = process.env.DATABASE; // this is bad practice
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run(){
@@ -37,7 +38,8 @@ async function run(){
             const query = {_id: ObjectId(id)};
             const result = await serviceCollection.deleteOne(query);
             res.send(result);
-        })
+        });
+        
 
     } finally {
         // await client.close();
